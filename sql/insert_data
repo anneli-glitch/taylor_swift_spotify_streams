@@ -1,14 +1,4 @@
-CREATE DATABASE taylor_swift_streams;
 USE taylor_swift_streams;
-
-CREATE TABLE taylor_swift_songs (
-    id_song INT AUTO_INCREMENT PRIMARY KEY,
-    song VARCHAR(150) NOT NULL,
-    release_year YEAR NOT NULL,
-    album VARCHAR(150) NOT NULL,
-    is_single BOOLEAN NOT NULL,
-    feature VARCHAR(150)
- );
  
 INSERT INTO taylor_swift_songs
 (song, release_year, album, is_single, feature)
@@ -339,3 +329,20 @@ values
 ('Honey',	2025,	'The Life of a Showgirl',	FALSE,	NULL),
 ('The Life of a Showgirl',	2025,	'The Life of a Showgirl',	FALSE,	'Sabrina Carpenter')
 ;
+
+--- Insertar datos a la tabla albums---
+INSERT INTO albums (album_name, release_year)
+SELECT DISTINCT album, release_year
+FROM taylor_swift_songs;
+
+UPDATE taylor_swift_songs s
+JOIN albums a 
+ON s.album = a.album_name
+SET s.album_id = a.album_id;
+
+ALTER TABLE taylor_swift_songs
+ADD CONSTRAINT fk_album
+FOREIGN KEY (album_id) REFERENCES albums(album_id);
+
+ALTER TABLE taylor_swift_songs
+DROP COLUMN album;
